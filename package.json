@@ -1,0 +1,16 @@
+{
+  "name": "tau-mud",
+  "version": "0.0.0",
+  "description": "Tau MUD Engine",
+  "main": "index.js",
+  "repository": "https://github.com/tau-mud/tau-mud",
+  "author": "fugufish",
+  "license": "MIT",
+  "private": true,
+  "workspaces": [
+    "packages/*"
+  ],
+  "devDependencies": {
+    "lerna": "^6.6.1"
+  }
+}
