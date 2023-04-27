@@ -12,5 +12,8 @@
   ],
   "devDependencies": {
     "lerna": "^6.6.1"
+  },
+  "scripts": {
+    "build:watch": "lerna run build:watch --stream"
   }
 }

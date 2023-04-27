@@ -1,0 +1,26 @@
+{
+  "name": "@tau-mud/core",
+  "version": "0.0.0",
+  "description": "Tau MUD Engine Core",
+  "author": "fugufish <fugu@hey.com>",
+  "homepage": "",
+  "license": "MIT",
+  "main": "lib/core.js",
+  "directories": {
+    "lib": "lib"
+  },
+  "files": [
+    "lib"
+  ],
+  "publishConfig": {
+    "access": "public"
+  },
+  "scripts": {
+    "build": "tsc",
+    "build:watch": "tsc -w"
+  },
+  "dependencies": {
+    "build-configs": "*",
+    "moleculer": "^0.14.29"
+  }
+}
