@@ -1,0 +1,24 @@
+{
+  "name": "example",
+  "version": "0.0.0",
+  "description": "Tau MUD Engine example",
+  "author": "fugufish <fugu@hey.com>",
+  "homepage": "",
+  "license": "MIT",
+  "main": "build/example.js",
+  "directories": {
+    "lib": "build"
+  },
+  "files": [
+    "build"
+  ],
+  "scripts": {
+    "build": "tsc",
+    "build:watch": "tsc -w",
+    "portal": "moleculer-runner --config build/config/portal.config.js"
+  },
+  "peerDependencies": {
+    "@tau-mud/core": "^0.0.0",
+    "@tau-mud/portal": "^0.0.0"
+  }
+}
