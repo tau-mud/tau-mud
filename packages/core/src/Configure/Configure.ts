@@ -3,7 +3,7 @@ import {BrokerOptions, ServiceBroker} from "moleculer";
 /**
  * A plugin is the primary way to extend the functionality of a Tau MUD process. Plugins simply extend the options
  * available to configure a Tau MUD process with. You can hook into the startup and shutdown of the process by
- * using the `created`, `started`, and `stopped` hooks. If defined on the oplugin they will be called at the
+ * using the `created`, `started`, and `stopped` hooks. If defined on the plugin they will be called at the
  * appropriate time.
  */
 export interface IPlugin extends Partial<BrokerOptions>{}
