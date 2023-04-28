@@ -5,13 +5,13 @@ interface HookSchema {
 }
 
 /**
- * Adds a hook to the service for the given Symbol
+ * Adds lifecycle a hook to the service for the given Symbol
  *
  * @param symbol the symbol representing the type of hook to add
  * @param name the name of the hook
  * @param descriptor the property descriptor of the method to add as a hook
  */
-export function addHook(symbol: Symbol, name: string,  descriptor: PropertyDescriptor) {
+export function addHook(symbol: Symbol, name: string, descriptor: PropertyDescriptor) {
     excludeMethod(descriptor)
     Reflect.defineMetadata(symbol, name, descriptor.value);
 }

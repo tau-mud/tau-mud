@@ -27,7 +27,26 @@ export interface ITauOptions extends Partial<BrokerOptions>{
      * A list of plugins to load into the process.
      */
     plugins?: IPlugin[];
+
+    /**
+     * Tau MUD Engine settings. This will be loaded into the `settings` service.
+     */
+    settings?: ITauSettings;
 }
+
+
+/**
+ * The Tau MUD Engine settings. This will be loaded into the `settings` service.
+ */
+export interface ITauSettings {
+    /**
+     * Individual services can be configured here. The values here will be deep merged into the service's `settings`.
+     */
+    services: {
+        [name: string]: any;
+    }
+}
+
 
 /**
  * Configure a Tau MUD process.

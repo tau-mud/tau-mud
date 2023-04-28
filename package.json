@@ -11,9 +11,15 @@
     "packages/*"
   ],
   "devDependencies": {
-    "lerna": "^6.6.1"
+    "lerna": "^6.6.1",
+    "typedoc": "^0.24",
+    "typedoc-github-wiki-theme": "^1.1",
+    "typedoc-plugin-markdown": "^3.15",
+    "nodemon": "^2.0.20",
+    "prettier": "^2.8.3"
   },
   "scripts": {
+    "docs:watch": "nodemon --watch packages --ext ts,tsx --exec \"rm -rf wiki/api/** && typedoc\"",
     "build:watch": "lerna run build:watch --stream --parallel"
   }
 }

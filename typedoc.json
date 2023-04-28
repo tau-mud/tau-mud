@@ -1,0 +1,15 @@
+{
+  "entryPoints": ["packages/core", "packages/portal"],
+  "name": "Tau MUD Engine",
+  "entryPointStrategy": "packages",
+  "includeVersion": true,
+  "plugin": [
+    "typedoc-plugin-markdown",
+    "typedoc-github-wiki-theme"
+  ],
+  "theme": "github-wiki",
+  "out": "wiki/api",
+  "excludePrivate": true,
+  "excludeProtected": true,
+  "exclude": ["*.spec.ts"]
+}
