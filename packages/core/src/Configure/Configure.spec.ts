@@ -1,5 +1,7 @@
 import { Configure, ITauOptions } from "./Configure";
 
+import {ServiceFactory} from "../Service/ServiceFactory";
+
 describe("Configure", () => {
     it("should append process ID to node ID when unique is false", () => {
         const nodeID = "test-node";
@@ -78,4 +80,14 @@ describe("Configure", () => {
 
         expect(pluginStopped).toHaveBeenCalledWith(broker);
     });
+
+    it("should correctly configure the ServiceFactory", () => {
+        const nodeID = "test-node";
+        const options: ITauOptions = {};
+        const broker = {} as any;
+
+        const result = Configure(nodeID, options).ServiceFactory
+
+        expect(result).toEqual(ServiceFactory)
+    })
 });

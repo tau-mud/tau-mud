@@ -1,4 +1,6 @@
-import {BrokerOptions, ServiceActionsSchema, ServiceBroker} from "moleculer";
+import {BrokerOptions, Service, ServiceBroker} from "moleculer";
+
+import {ServiceFactory} from "../Service/ServiceFactory";
 
 
 /**
@@ -89,6 +91,7 @@ export function Configure(nodeID: string, options: ITauOptions = {}): BrokerOpti
         ...options,
         created,
         started,
-        stopped
+        stopped,
+        ServiceFactory: ServiceFactory as typeof Service,
     }
 }
