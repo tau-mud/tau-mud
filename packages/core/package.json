@@ -21,6 +21,7 @@
   },
   "dependencies": {
     "build-configs": "*",
-    "moleculer": "^0.14.29"
+    "moleculer": "^0.14.29",
+    "reflect-metadata": "^0.1.13"
   }
 }

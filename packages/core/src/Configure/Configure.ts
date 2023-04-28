@@ -1,4 +1,5 @@
-import {BrokerOptions, ServiceBroker} from "moleculer";
+import {BrokerOptions, ServiceActionsSchema, ServiceBroker} from "moleculer";
+
 
 /**
  * A plugin is the primary way to extend the functionality of a Tau MUD process. Plugins simply extend the options
