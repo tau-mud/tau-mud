@@ -84,7 +84,6 @@ describe("Configure", () => {
     it("should correctly configure the ServiceFactory", () => {
         const nodeID = "test-node";
         const options: ITauOptions = {};
-        const broker = {} as any;
 
         const result = Configure(nodeID, options).ServiceFactory
 
