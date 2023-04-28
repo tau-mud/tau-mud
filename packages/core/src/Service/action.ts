@@ -1,6 +1,6 @@
 import "reflect-metadata";
 import {ActionSchema, ServiceActionsSchema} from "moleculer";
-import {Service} from "./Service";
+import {Base} from "./Base";
 
 export const ACTION_SCHEMA = Symbol("ACTION_SCHEMA");
 
@@ -27,7 +27,7 @@ export function action(schema: Partial<ActionSchema> = {}) {
  * Gets and returns the ServiceActionsSchema for an instance of a Tau MUD Engine service class.
  * @param service An instance of a Tau MUD Engine service class.
  */
-export function getServiceActionSchema(service: Service): ServiceActionsSchema {
+export function getServiceActionSchema(service: Base): ServiceActionsSchema {
     const actions: ServiceActionsSchema = {};
     const proto = Object.getPrototypeOf(service);
 

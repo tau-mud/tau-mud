@@ -1,13 +1,13 @@
 import {ServiceBroker} from "moleculer";
 
 import {before, getServiceHooksBefore} from "./before";
-import {Service} from "./Service";
+import {Base} from "./Base";
 
 describe("before", () => {
     it("adds a before hook for the given name", () => {
         const broker = new ServiceBroker();
 
-        class TestService extends Service {
+        class TestService extends Base {
             name = "test";
 
             @before("greet")
@@ -26,7 +26,7 @@ describe("before", () => {
     it("appends additional hooks for the given name", () => {
         const broker = new ServiceBroker();
 
-        class TestService extends Service {
+        class TestService extends Base {
             name = "test";
 
             @before("greet")

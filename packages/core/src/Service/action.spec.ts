@@ -1,5 +1,5 @@
 import {action, ACTION_SCHEMA, getServiceActionSchema} from "./action";
-import {Service} from "./Service";
+import {Base} from "./Base";
 import {ServiceBroker} from "moleculer";
 
 describe("action", () => {
@@ -14,7 +14,7 @@ describe("action", () => {
             }
         };
 
-        class TestService extends Service {
+        class TestService extends Base {
             name = "test";
 
             @action(schema)
@@ -44,7 +44,7 @@ describe("action", () => {
             }
         };
 
-        class TestService extends Service {
+        class TestService extends Base {
             name = "test";
 
             @action(schema)

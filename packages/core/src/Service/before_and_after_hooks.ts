@@ -1,4 +1,4 @@
-import {excludeMethod, Service} from "./Service";
+import {excludeMethod, Base} from "./Base";
 
 interface HookSchema {
     [name: string]: Function[]
@@ -21,7 +21,7 @@ export function addHook(symbol: Symbol, name: string,  descriptor: PropertyDescr
  * @param symbol the symbol representing the type of hook to get
  * @param service the service to get the hooks for
  */
-export function getHooks(symbol: Symbol, service: Service): HookSchema {
+export function getHooks(symbol: Symbol, service: Base): HookSchema {
     const hooks: HookSchema = {};
 
     const proto = Object.getPrototypeOf(service);
