@@ -1,6 +1,6 @@
 import { ServiceHooksBefore } from "moleculer";
 
-import {addHook, getHooks} from "./before_and_after_hooks";
+import {addHook, getHooks} from "./hooks";
 import {Base} from "./Base";
 
 const AFTER_HOOK = Symbol("AFTER_HOOK");
