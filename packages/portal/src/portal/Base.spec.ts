@@ -11,6 +11,7 @@ describe("Base", () => {
     }
 
     const broker = new ServiceBroker(Configure("test", {
+        logger: false,
         transporter: "fake"
     }))
 
