@@ -154,6 +154,34 @@ describe("ServiceFactory", () => {
                 bar: "baz"
             })
         })
-
     });
+
+    it("doesn't throw an exception if service settings are not set", () => {
+        const broker = new ServiceBroker(Configure("test", {}));
+
+        class TestService extends Base {
+            name = "test";
+        }
+
+        expect(() => new ServiceFactory(broker, TestService)).not.toThrow();
+    })
+
+    it("parses Tau MUD Engine service mixins", () => {
+        const broker = new ServiceBroker(Configure("test", {}));
+
+        class TestMixin extends Base {
+            name = "testMixin";
+        }
+
+        class TestService extends Base {
+            name = "test";
+            mixins = [TestMixin];
+        }
+
+        const service = new ServiceFactory(broker, TestService);
+
+        expect(service.originalSchema.mixins).toEqual(expect.arrayContaining([expect.objectContaining({
+            name: "testMixin"
+        })]));
+    })
 });

@@ -45,14 +45,16 @@ function parseService(service: Base, broker: ServiceBroker): ServiceSchema {
     let settings = service.settings || {};
     const tauSettings = (broker.options as ITauOptions).settings || {} as ITauSettings;
 
-    if (tauSettings.services[service.name]) {
+    if (tauSettings.services && tauSettings.services[service.name]) {
         settings = defaultsDeep(settings, tauSettings.services[service.name]);
     }
+
+    const mixins = parseMixins(service.mixins, broker);
 
     const schema: ServiceSchema = {
         name: service.name,
         settings,
-        mixins: service.mixins,
+        mixins,
         metadata: service.metadata,
         actions,
         methods: getServiceMethods(service, actions)
@@ -71,6 +73,20 @@ function parseService(service: Base, broker: ServiceBroker): ServiceSchema {
     }
 
     return schema;
+}
+
+function parseMixins(mixins: (Base | ServiceSchema)[], broker: ServiceBroker): ServiceSchema[] {
+    if (!mixins) {
+        return [];
+    }
+
+    return mixins.map(mixin => {
+        if (typeof mixin === "function" && Object.getPrototypeOf(mixin) === Base) {
+            return parseService(new (mixin as ServiceConstructor)(broker), broker);
+        }
+
+        return mixin;
+    })
 }
 
 function getServiceMethods(service: Base, actions: ServiceActionsSchema): ServiceMethods {
