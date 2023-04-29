@@ -127,7 +127,14 @@ interface IErrorMeta {
  * | {@link writeLine} | {@link IPortalWriteActionParams} | No | `public` | Write a line of data to a connection. |
  * | {@link writeLines} | {@link IPortalWriteActionParams} | No | `public` | Write multiple lines of data to a connection. |
  *
- * ### Events
+ * ### Emitted Events
+ * | Event | Payload | Emit/Broadcast | Description |
+ * | ----- | ------- | -------------- | ----------- |
+ * | `portal.connected` | {@link IPortalActionParams} | Emit | Emitted when a connection is established. |
+ * | `portal.disconnected` | {@link IPortalActionParams} | Emit | Emitted when a connection is terminated. |
+ * | `portal.metadata.deleted` | {@link IPortalDeleteMetadataActionParams} | Emit | Emitted when metadata is deleted. |
+ * | `portal.metadata.set` | {@link ISetMetadataActionParams} | Emit | Emitted when metadata is set. |
+ * | `portal.timeout` | {@link IPortalActionParams} | Emit | Emitted when a connection times out. |
  */
 export class Base extends service.Base<IPortalSettings> {
     name = "portal"
