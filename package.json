@@ -19,7 +19,7 @@
     "prettier": "^2.8.3"
   },
   "scripts": {
-    "docs:watch": "nodemon --watch packages --ext ts,tsx --exec \"rm -rf wiki/api/** && typedoc\"",
+    "docs:watch": "nodemon --watch packages --ext ts,tsx --exec \"rm -rf wiki/api/@tau* && typedoc\"",
     "build:watch": "lerna run build:watch --stream --parallel"
   }
 }

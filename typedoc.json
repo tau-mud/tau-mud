@@ -11,5 +11,7 @@
   "out": "wiki/api",
   "excludePrivate": true,
   "excludeProtected": true,
+  "excludeExternals": true,
+  "excludeInternal": true,
   "exclude": ["*.spec.ts"]
 }

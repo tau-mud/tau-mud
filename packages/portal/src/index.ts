@@ -1,2 +1,2 @@
 export * from "./Plugin"
-export * from "./Portal"
+export * as portal from "./portal"

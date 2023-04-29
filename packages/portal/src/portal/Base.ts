@@ -25,54 +25,54 @@ export interface IPortalSettings {
 }
 
 /**
- * The parameters for the {@link Portal} connection callbacks.
+ * The parameters for the {@link Base} connection callbacks.
  */
 export interface IPortalActionParams extends ISocketActionParams {
 }
 
 /**
- * The parameters for the {@link Portal} `setMetadata` action.
+ * The parameters for the {@link Base} `setMetadata` action.
  */
 export interface IPortalSetMetadataActionParams
     extends ISetMetadataActionParams {}
 
 /**
- * The parameters for the {@link Portal} `deleteMetadata` action.
+ * The parameters for the {@link Base} `deleteMetadata` action.
  */
 export interface IPortalDeleteMetadataActionParams
     extends IDeleteMetadataActionParams {}
 
 /**
- * The parameters for the {@link Portal} `getAllMetadata` action.
+ * The parameters for the {@link Base} `getAllMetadata` action.
  */
 export interface IPortalGetAllMetadataActionParams
     extends IGetAllMetadataActionParams {}
 
 /**
- * The parameters for the {@link Portal} `getMetadata` action.
+ * The parameters for the {@link Base} `getMetadata` action.
  */
 export interface IPortalGetMetadataActionParams
     extends IGetMetadataActionParams {}
 
 /**
- * The parameters for the {@link Portal} `mergeMetadata` action.
+ * The parameters for the {@link Base} `mergeMetadata` action.
  */
 export interface IPortalMergeMetadataActionParams
     extends IMergeMetadataActionParams {}
 
 /**
- * The parameters for the {@link Portal} `onData` action.
+ * The parameters for the {@link Base} `onData` action.
  */
 export interface IPortalOnDataActionParams extends IOnSocketDataActionParams {}
 
 /**
  *
- * The parameters for the {@link Portal} `write` actions.
+ * The parameters for the {@link Base} `write` actions.
  */
 export interface IPortalWriteActionParams extends IWriteActionParams {}
 
 /**
- * The parameters for the {@link Portal} `setController` action.
+ * The parameters for the {@link Base} `setController` action.
  */
 export interface IPortalSetControllerActionParams extends IPortalActionParams {
     /**
@@ -88,13 +88,59 @@ interface IErrorMeta {
     error: boolean;
 }
 
-export class Portal extends service.Base<IPortalSettings> {
+/**
+ * The Portal mixin provides the base Portal functionality. A Portal is a server by which a game client can connect to
+ * the game. As each Portal may be uniquely designed to talk to a different type of client, the Portal mixin requires
+ * the implementation to override the following actions to provide the necessary functionality:
+ *
+ * - {@link deleteMetadata}
+ * - {@link getAllMetadata}
+ * - {@link getMetadata}
+ * - {@link mergeMetadata}
+ * - {@link setMetadata}
+ * - {@link write}
+ *
+ * ### Understanding Metadata
+ * Information about the active connection is stored in the connections `metadata`. This may include information about
+ * the user's connection, such as their ip address or their client configuration, but also includes information about
+ * how their connection interactions should be processed .i.e. the current controller that is handling their input.
+ *
+ * ### Settings
+ * | Setting | Type | Default | Description |
+ * | ------- | ---- | ------- | ----------- |
+ * | `defaultController` | `string` | `motd` | The name of the controller to use when a connection is first established. |
+ *
+ * ### Actions
+ * | Action | Params | Override? | Privacy | Description |
+ * | ------ | ------ | --------- | ------- | ----------- |
+ * | {@link deleteMetadata} | {@link IPortalDeleteMetadataActionParams} | Yes | `public` | Delete the metadata for a connection. This action will emit the `portal.metadata.deleted` event. |
+ * | {@link getAllMetadata} | {@link IPortalGetAllMetadataActionParams} | Yes | `public` | Get all metadata for a connection. |
+ * | {@link getMetadata} | {@link IPortalGetMetadataActionParams} | Yes | `public` | Get a specific metadata value for a connection. |
+ * | {@link mergeMetadata} | {@link IMergeMetadataActionParams} | Yes | `public` | Merge metadata for a connection. This action will emit the `portal.metadata.set` event for each key that was merged. |
+ * | {@link setMetadata} | {@link ISetMetadataActionParams} | Yes | `public` | Set metadata for a connection. This action will emit the `portal.metadata.set` event. |
+ * | {@link onConnect} | {@link IPortalActionParams} | Yes | `private` | Called when a connection is established. This action will emit the `portal.connected` event. |
+ * | {@link onData} | {@link IPortalOnDataActionParams} | No | `private` | Called when data is received from a connection. |
+ * | {@link onDisconnect} | {@link IPortalActionParams} | Yes | `private` | Called when a connection is terminated. This action will emit the `portal.disconnected` event. |
+ * | {@link onTimeout} | {@link IPortalActionParams} | Yes | `private` | Called when a connection times out. This action will emit the `portal.timeout` event. |
+ * | {@link write} | {@link IWriteActionParams} | Yes | `public` | Write data to a connection. |
+ * | {@link setController} | {@link IPortalSetControllerActionParams} | Not | `public` | Set the controller for a connection. |
+ * | {@link writeLine} | {@link IPortalWriteActionParams} | No | `public` | Write a line of data to a connection. |
+ * | {@link writeLines} | {@link IPortalWriteActionParams} | No | `public` | Write multiple lines of data to a connection. |
+ *
+ * ### Events
+ */
+export class Base extends service.Base<IPortalSettings> {
     name = "portal"
-
     settings = {
         defaultController: "motd"
     }
 
+    /**
+     * The error hook is used to ensure the client is notified if an error occurs while processing their input.
+     *
+     * @param ctx The context of the action that errored.
+     * @param err The error that occurred.
+     */
     @error("*")
     async errorHook(ctx: Context<IPortalActionParams, IErrorMeta>, err: Error) {
         // the error meta property ensures we don't enter an infinite loop when handling an error
@@ -111,6 +157,13 @@ export class Portal extends service.Base<IPortalSettings> {
         this.logger.error(err, {connectionId: ctx.params.id});
     }
 
+
+    /**
+     * Override this action with the Portal specific method of deleting metadata.
+     *
+     *
+     * @param ctx The delete metadata action context.
+     */
     @action({
         params: {
             id: "string",
@@ -123,7 +176,7 @@ export class Portal extends service.Base<IPortalSettings> {
             },
         }
     })
-    deleteMetadata(ctx: Context<IDeleteMetadataActionParams>) {
+    deleteMetadata(_ctx: Context<IDeleteMetadataActionParams>) {
         throw new Errors.MoleculerError(
             "Not implemented",
             501,
@@ -131,12 +184,17 @@ export class Portal extends service.Base<IPortalSettings> {
         );
     }
 
+    /**
+     * Override this action with the Portal specific method of getting all metadata for a connection.
+     *
+     * @param ctx context for the get all metadata action.
+     */
     @action({
         params: {
             id: "string",
         }
     })
-    async getAllMetadata(ctx: Context<IPortalActionParams>) {
+    async getAllMetadata(_ctx: Context<IPortalActionParams>) {
         throw new Errors.MoleculerError(
             "Not implemented",
             501,
@@ -144,13 +202,18 @@ export class Portal extends service.Base<IPortalSettings> {
         );
     }
 
+    /**
+     * Override this action with the Portal specific method of getting a specific metadata property for a connection.
+     *
+     * @param ctx context for the get metadata action.
+     */
     @action({
         params: {
             id: "string",
             key: "string",
         },
     })
-    async getMetadata(ctx: Context<IPortalActionParams>) {
+    async getMetadata(_ctx: Context<IPortalActionParams>) {
         throw new Errors.MoleculerError(
             "Not implemented",
             501,
@@ -158,6 +221,11 @@ export class Portal extends service.Base<IPortalSettings> {
         );
     }
 
+    /**
+     * Override this action with the Portal specific method of merging an object into the connections metadata
+     *
+     * @param ctx context for the merge metadata action.
+     */
     @action({
         params: {
             id: "string",
@@ -177,7 +245,7 @@ export class Portal extends service.Base<IPortalSettings> {
             },
         },
     })
-    async mergeMetadata(ctx: Context<IPortalMergeMetadataActionParams>) {
+    async mergeMetadata(_ctx: Context<IPortalMergeMetadataActionParams>) {
         throw new Errors.MoleculerError(
             "Not implemented",
             501,
@@ -185,6 +253,11 @@ export class Portal extends service.Base<IPortalSettings> {
         );
     }
 
+    /**
+     * Override this action the Portal specific implementation of handling a new connection.
+     *
+     * @param ctx context for the set metadata action.
+     */
     @action({
         params: {
             id: "string",
@@ -219,7 +292,7 @@ export class Portal extends service.Base<IPortalSettings> {
             },
         },
     })
-    onConnect(ctx: Context<IPortalActionParams>) {
+    onConnect(_ctx: Context<IPortalActionParams>) {
         throw new Errors.MoleculerError(
             "Not implemented",
             501,
@@ -227,6 +300,13 @@ export class Portal extends service.Base<IPortalSettings> {
         );
     }
 
+    /**
+     * This action is to be called when a client sends data to the server. The Portal implementation will be
+     * responsible for calling this action when data is received from the client socket. Data received will be passed
+     * to the controller for processing.
+     *
+     * @param ctx context for the set metadata action.
+     */
     @action({
         params: {
             id: "string",
@@ -253,6 +333,11 @@ export class Portal extends service.Base<IPortalSettings> {
         }
     }
 
+    /**
+     * Override this action with the Portal specific implementation of handling a client disconnect.
+     *
+     * @param ctx context for the disconnect action.
+     */
     @action({
         params: {
             id: "string",
@@ -264,6 +349,11 @@ export class Portal extends service.Base<IPortalSettings> {
     }
 
 
+    /**
+     * Override this action with the Portal specific implementation of handling a client timeout.
+     *
+     * @param ctx context for the timeout action.
+     */
     @action({
         params: {
             id: "string",
@@ -274,6 +364,11 @@ export class Portal extends service.Base<IPortalSettings> {
         return this.broker.emit("portal.timeout", {id: ctx.params.id});
     }
 
+    /**
+     * Sets the controller for a connection.
+     *
+     * @param ctx context for the set controller action.
+     */
     @action({
         params: {
             id: "string",
@@ -323,6 +418,11 @@ export class Portal extends service.Base<IPortalSettings> {
         });
     }
 
+    /**
+     * Override this action with the Portal specific method of setting a specific metadata property for a connection.
+     *
+     * @param ctx context for the set metadata action.
+     */
     @action({
         params: {
             id: "string",
@@ -341,7 +441,7 @@ export class Portal extends service.Base<IPortalSettings> {
             },
         }
     })
-    setMetadata(ctx: Context<IPortalSetMetadataActionParams>) {
+    setMetadata(_ctx: Context<IPortalSetMetadataActionParams>) {
         throw new Errors.MoleculerError(
             "Not implemented",
             501,
@@ -349,13 +449,18 @@ export class Portal extends service.Base<IPortalSettings> {
         );
     }
 
+    /**
+     * Override this action with the Portal specific implementation of writing data to the client socket.
+     *
+     * @param ctx context for the write action.
+     */
     @action({
         params: {
             id: "string",
             data: "any",
         },
     })
-    write(ctx: Context<IPortalWriteActionParams>) {
+    write(_ctx: Context<IPortalWriteActionParams>) {
         throw new Errors.MoleculerError(
             "Not implemented",
             501,
@@ -363,6 +468,11 @@ export class Portal extends service.Base<IPortalSettings> {
         );
     }
 
+    /**
+     * Writes a line of data to the client socket.
+     *
+     * @param ctx context for the write action.
+     */
     @action({
         params: {
             id: "string",
@@ -385,6 +495,11 @@ export class Portal extends service.Base<IPortalSettings> {
         });
     }
 
+    /**
+     * Writes multiple lines of data to the client socket.
+     *
+     * @param ctx
+     */
     @action({
         params: {
             id: "string",
